@@ -17,6 +17,7 @@ namespace LotteryGame.Services
             players.Add(humanPlayer);
             console.WriteLine($"Welcome, Player 1! You have ${config.InitialBalance:F2}. Each ticket costs ${config.TicketCost:F2}.");
             console.Write($"How many tickets do you want to purchase ({config.MinTicketsPerPlayer}-{config.MaxTicketsPerPlayer})? ");
+            
             int tickets = ReadValidTicketCount(console, config);
             humanPlayer.PurchaseTickets(tickets, config.TicketCost);
 
@@ -42,7 +43,7 @@ namespace LotteryGame.Services
             while (!int.TryParse(console.ReadLine(), out count) ||
                    count < config.MinTicketsPerPlayer || count > config.MaxTicketsPerPlayer)
             {
-                console.WriteLine($"Invalid input. Please enter a number between {config.MinTicketsPerPlayer} and {config.MaxTicketsPerPlayer}: ");
+                console.Write($"Invalid input. Please enter a number between {config.MinTicketsPerPlayer} and {config.MaxTicketsPerPlayer}: ");
             }
             return count;
         }
