@@ -1,5 +1,4 @@
 using LotteryGame.Services;
-using System.Collections.Generic;
 
 namespace LotteryGame.Tests.ServiceTests
 {

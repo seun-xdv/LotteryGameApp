@@ -1,23 +1,22 @@
 using LotteryGame.Configuration;
 using LotteryGame.Services;
 using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
-using LotteryGame.Tests.ServiceTests;
-using Xunit;
 
 namespace LotteryGame.Tests.ServiceTests
 {
     public class LotteryServiceTests
-    {
-        
-        // Helper to create a LotteryService with a given configuration and fake console.
+    {   
+        // Helper method to create a LotteryService with provided configuration and fake console.
         private ILotteryService CreateLotteryService(LotteryConfig config, IConsoleService console)
         {
             var options = Options.Create(config);
-            return new LotteryService(options, console);
-        }
+            // For simplicity, instantiate the helper services directly.
+            IPlayerManager playerManager = new PlayerManager();
+            ITicketManager ticketManager = new TicketManager();
+            IPrizeDistributor prizeDistributor = new PrizeDistributor();
 
+            return new LotteryService(options, console, playerManager, ticketManager, prizeDistributor);
+        }
         
         [Fact]
         public void RunGame_ExecutesWithoutExceptions()
