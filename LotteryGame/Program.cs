@@ -14,7 +14,8 @@ services.AddSingleton<IConfiguration>(configuration);
 // Bind LotteryConfig from the configuration.
 services.Configure<LotteryConfig>(configuration.GetSection("LotteryConfig"));
 
-// Register the lottery service.
+// Register the console service and lottery service.
+services.AddSingleton<IConsoleService, ConsoleService>();
 services.AddSingleton<ILotteryService, LotteryService>();
 
 // Build service provider.

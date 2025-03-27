@@ -2,91 +2,87 @@ using LotteryGame.Configuration;
 using LotteryGame.Services;
 using Microsoft.Extensions.Options;
 using System;
-using System.IO;
+using System.Linq;
+using LotteryGame.Tests.ServiceTests;
 using Xunit;
 
-public class LotteryServiceTests
+namespace LotteryGame.Tests.ServiceTests
 {
-    // Helper to create a LotteryService with a given configuration.
-    private ILotteryService CreateLotteryService(LotteryConfig config)
+    public class LotteryServiceTests
     {
-        var options = Options.Create(config);
-        return new LotteryService(options);
-    }
-
-    [Fact]
-    public void RunGame_ExecutesWithoutExceptions()
-    {
-        // Arrange: Use a fixed configuration for predictability.
-        var config = new LotteryConfig
+        
+        // Helper to create a LotteryService with a given configuration and fake console.
+        private ILotteryService CreateLotteryService(LotteryConfig config, IConsoleService console)
         {
-            TicketCost = 1.0m,
-            InitialBalance = 10.0m,
-            MinPlayers = 10,
-            MaxPlayers = 10,
-            MinTicketsPerPlayer = 1,
-            MaxTicketsPerPlayer = 10,
-            GrandPrizePercentage = 0.50,
-            SecondTierPrizePercentage = 0.30,
-            ThirdTierPrizePercentage = 0.10,
-            SecondTierWinnerPercentage = 0.10,
-            ThirdTierWinnerPercentage = 0.20
-        };
-        var lotteryService = CreateLotteryService(config);
+            var options = Options.Create(config);
+            return new LotteryService(options, console);
+        }
 
-        // Simulate valid user input ("3" tickets) via the console.
-        var input = new StringReader("3\n");
-        Console.SetIn(input);
-
-        // Capture console output.
-        var output = new StringWriter();
-        Console.SetOut(output);
-
-        // Act: Run the game.
-        var exception = Record.Exception(() => lotteryService.RunGame());
-
-        // Assert: No exceptions are thrown and output includes key sections.
-        Assert.Null(exception);
-        var consoleOutput = output.ToString();
-        Assert.Contains("Players and Ticket Purchases", consoleOutput);
-        Assert.Contains("Winning Tickets", consoleOutput);
-        Assert.Contains("House Profit", consoleOutput);
-    }
-
-    [Fact]
-    public void RunGame_InvalidInputHandledGracefully()
-    {
-        // Arrange: Set up configuration.
-        var config = new LotteryConfig
+        
+        [Fact]
+        public void RunGame_ExecutesWithoutExceptions()
         {
-            TicketCost = 1.0m,
-            InitialBalance = 10.0m,
-            MinPlayers = 10,
-            MaxPlayers = 10,
-            MinTicketsPerPlayer = 1,
-            MaxTicketsPerPlayer = 10,
-            GrandPrizePercentage = 0.50,
-            SecondTierPrizePercentage = 0.30,
-            ThirdTierPrizePercentage = 0.10,
-            SecondTierWinnerPercentage = 0.10,
-            ThirdTierWinnerPercentage = 0.20
-        };
-        var lotteryService = CreateLotteryService(config);
+            // Arrange: Fixed configuration for testing.
+            var config = new LotteryConfig
+            {
+                TicketCost = 1.0m,
+                InitialBalance = 10.0m,
+                MinPlayers = 10,
+                MaxPlayers = 10,
+                MinTicketsPerPlayer = 1,
+                MaxTicketsPerPlayer = 10,
+                GrandPrizePercentage = 0.50,
+                SecondTierPrizePercentage = 0.30,
+                ThirdTierPrizePercentage = 0.10,
+                SecondTierWinnerPercentage = 0.10,
+                ThirdTierWinnerPercentage = 0.20
+            };
 
-        // Simulate invalid input ("abc") followed by a valid input ("4").
-        var input = new StringReader("abc\n4\n");
-        Console.SetIn(input);
+            // Simulate valid user input ("3" tickets) via the fake console.
+            var fakeConsole = new FakeConsoleService(new[] { "3" });
+            var lotteryService = CreateLotteryService(config, fakeConsole);            
 
-        // Capture console output.
-        var output = new StringWriter();
-        Console.SetOut(output);
+            // Act & Assert: Ensure the game runs without exceptions.
+            var exception = Record.Exception(() => lotteryService.RunGame());
+            Assert.Null(exception);
 
-        // Act: Run the game.
-        lotteryService.RunGame();
+            // Verify that output contains expected sections.
+            string output = string.Join("\n", fakeConsole.OutputMessages);
+            Assert.Contains("Players and Ticket Purchases", output);
+            Assert.Contains("Winning Tickets", output);
+            Assert.Contains("House Profit", output);
+        }
+        
+        [Fact]
+        public void RunGame_InvalidInputHandledGracefully()
+        {
+            // Arrange: Configuration as before.
+            var config = new LotteryConfig
+            {
+                TicketCost = 1.0m,
+                InitialBalance = 10.0m,
+                MinPlayers = 10,
+                MaxPlayers = 10,
+                MinTicketsPerPlayer = 1,
+                MaxTicketsPerPlayer = 10,
+                GrandPrizePercentage = 0.50,
+                SecondTierPrizePercentage = 0.30,
+                ThirdTierPrizePercentage = 0.10,
+                SecondTierWinnerPercentage = 0.10,
+                ThirdTierWinnerPercentage = 0.20
+            };
 
-        // Assert: Output should show the invalid input prompt and then the normal game output.
-        var consoleOutput = output.ToString();
-        Assert.Contains("Invalid input. Please enter a number between", consoleOutput);
-        Assert.Contains("Players and Ticket Purchases", consoleOutput);
+            // Simulate invalid input ("abc") followed by valid input ("4").
+            var fakeConsole = new FakeConsoleService(new[] { "abc", "4" });
+            var lotteryService = CreateLotteryService(config, fakeConsole);
+
+            // Act
+            lotteryService.RunGame();
+
+            // Assert: Verify that the output shows an invalid input message.
+            string output = string.Join("\n", fakeConsole.OutputMessages);
+            Assert.Contains("Invalid input. Please enter a number between", output);
+            Assert.Contains("Players and Ticket Purchases", output);
+        }
     }
 }

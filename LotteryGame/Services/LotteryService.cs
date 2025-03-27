@@ -1,20 +1,25 @@
 using LotteryGame.Configuration;
 using LotteryGame.Models;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LotteryGame.Services
 {
     /// <summary>
-    /// Lottery game logic.
+    /// Lottery game logic separated from I/O.
     /// </summary>
     public class LotteryService : ILotteryService
     {
         private readonly LotteryConfig _config;
         private readonly Random _random = new Random();
+        private readonly IConsoleService _console;
 
-        public LotteryService(IOptions<LotteryConfig> config)
+        public LotteryService(IOptions<LotteryConfig> config, IConsoleService console)
         {
             _config = config.Value;
+            _console = console;
         }
 
         /// <summary>
@@ -37,8 +42,8 @@ namespace LotteryGame.Services
             }
 
             // Human ticket purchase
-            Console.WriteLine($"Welcome, Player 1! You have ${_config.InitialBalance:F2}. Each ticket costs ${_config.TicketCost:F2}.");
-            Console.Write($"How many tickets do you want to purchase ({_config.MinTicketsPerPlayer}-{_config.MaxTicketsPerPlayer})? ");
+            _console.WriteLine($"Welcome, Player 1! You have ${_config.InitialBalance:F2}. Each ticket costs ${_config.TicketCost:F2}.");
+            _console.Write($"How many tickets do you want to purchase ({_config.MinTicketsPerPlayer}-{_config.MaxTicketsPerPlayer})? ");
             int ticketsToPurchase = GetValidTicketInput();
             humanPlayer.PurchaseTickets(ticketsToPurchase, _config.TicketCost);
 
@@ -142,16 +147,16 @@ namespace LotteryGame.Services
             decimal houseProfit = totalRevenue - prizesDistributed;
 
             // --- Output the results ---
-            Console.WriteLine("\n--- Players and Ticket Purchases ---");
-            Console.WriteLine($"{totalPlayers} players bought {totalTicketsSold} tickets worth ${totalRevenue:F2}.");
+            _console.WriteLine("\n--- Players and Ticket Purchases ---");
+            _console.WriteLine($"{totalPlayers} players bought {totalTicketsSold} tickets worth ${totalRevenue:F2}.");
             
-            Console.WriteLine("\n--- Winning Tickets ---");
+            _console.WriteLine("\n--- Winning Tickets ---");
             foreach (var win in winningTickets)
             {
-                Console.WriteLine($"{win.Ticket.Player.Name} won {win.PrizeTier} and received ${win.PrizeAmount}");
+                _console.WriteLine($"{win.Ticket.Player.Name} won {win.PrizeTier} and received ${win.PrizeAmount}");
             }
             
-            Console.WriteLine($"\nHouse Profit: ${houseProfit}");
+            _console.WriteLine($"\nHouse Profit: ${houseProfit}");
         }
 
         /// <summary>
@@ -161,10 +166,10 @@ namespace LotteryGame.Services
         private int GetValidTicketInput()
         {
             int tickets;
-            while (!int.TryParse(Console.ReadLine(), out tickets) ||
+            while (!int.TryParse(_console.ReadLine(), out tickets) ||
                    tickets < _config.MinTicketsPerPlayer || tickets > _config.MaxTicketsPerPlayer)
             {
-                Console.Write($"Invalid input. Please enter a number between {_config.MinTicketsPerPlayer} and {_config.MaxTicketsPerPlayer}: ");
+                _console.Write($"Invalid input. Please enter a number between {_config.MinTicketsPerPlayer} and {_config.MaxTicketsPerPlayer}: ");
             }
             return tickets;
         }
