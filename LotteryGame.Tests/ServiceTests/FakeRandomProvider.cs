@@ -3,7 +3,7 @@ using LotteryGame.Services;
 namespace LotteryGame.Tests.ServiceTests
 {
     /// <summary>
-    /// Fake randomizer for predictable behaviour in tests.
+    /// Implements IRandomProvider for test builds.
     /// </summary>
     public class FakeRandomProvider : IRandomProvider
     {

@@ -3,7 +3,7 @@ using LotteryGame.Services;
 namespace LotteryGame.Tests.ServiceTests
 {
     /// <summary>
-    /// A fake implementation of IConsoleService for testing purposes.
+    /// Implement IConsoleService for test builds.
     /// </summary>
     public class FakeConsoleService : IConsoleService
     {

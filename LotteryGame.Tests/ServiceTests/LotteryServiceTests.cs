@@ -77,7 +77,7 @@ namespace LotteryGame.Tests.ServiceTests
             var fakeConsole = new FakeConsoleService(new[] { "abc", "4" });
             var lotteryService = CreateLotteryService(config, fakeConsole);
 
-            // Act
+            // Act: Run the game
             lotteryService.RunGame();
 
             // Assert: Verify that the output shows an invalid input message.

@@ -41,10 +41,10 @@ namespace LotteryGame.Tests.ServiceTests
             IPrizeDistributor prizeDistributor = new PrizeDistributor();
             var fakeRandom = new FakeRandomProvider();
 
-            // Act
+            // Act: Distribute prizes
             PrizeDistributionResult result = prizeDistributor.DistributePrizes(new List<Ticket>(tickets), config, totalRevenue, fakeRandom);
 
-            // Assert
+            // Assert: Check for accurate winner selection and house profit
             Assert.NotNull(result);
             Assert.Equal(4, result.WinningTickets.Count);
 

@@ -28,15 +28,15 @@ namespace LotteryGame.Tests.ServiceTests
             IPlayerManager playerManager = new PlayerManager();
             var fakeRandom = new FakeRandomProvider();
 
-            // Act
+            // Act: Create the players
             List<Player> players = playerManager.CreatePlayers(config, fakeConsole, fakeRandom);
 
-            // Assert
+            // Assert: Check for correct number of tickets
             Assert.NotEmpty(players);
             var humanPlayer = players[0];
             Assert.True(humanPlayer.IsHuman);
             Assert.Equal(3, humanPlayer.TicketCount);
-            Assert.Equal(5, players.Count); // Fixed to 5 players
+            Assert.Equal(5, players.Count); 
         }
 
         [Fact]
@@ -58,10 +58,10 @@ namespace LotteryGame.Tests.ServiceTests
             IPlayerManager playerManager = new PlayerManager();
             var fakeRandom = new FakeRandomProvider();
 
-            // Act
+            // Act: Create the players
             List<Player> players = playerManager.CreatePlayers(config, fakeConsole, fakeRandom);
 
-            // Assert
+            // Assert: Check that valid input produces 4 tickets
             var humanPlayer = players[0];
             Assert.Equal(4, humanPlayer.TicketCount);
         }

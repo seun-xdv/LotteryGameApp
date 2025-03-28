@@ -26,10 +26,10 @@ namespace LotteryGame.Tests.ServiceTests
 
             ITicketManager ticketManager = new TicketManager();
 
-            // Act
+            // Act: Generate tickets
             List<Ticket> tickets = ticketManager.GenerateTickets(players);
 
-            // Assert
+            // Assert: Check that tickets match expected amount (10)
             Assert.Equal(expectedTicketCount, tickets.Count);
         }
     }
