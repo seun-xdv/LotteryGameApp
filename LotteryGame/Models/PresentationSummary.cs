@@ -1,7 +1,7 @@
 namespace LotteryGame.Models
 {
     /// <summary>
-    /// Contains precomputed summary data for result presentation.
+    /// Pre-computed summary data for result presentation.
     /// </summary>
     public class PresentationSummary
     {

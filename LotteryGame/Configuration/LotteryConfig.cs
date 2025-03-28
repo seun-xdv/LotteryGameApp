@@ -1,7 +1,7 @@
 namespace LotteryGame.Configuration
 {
     /// <summary>
-    /// Configuration settings for the lottery game.
+    /// Configuration settings; loaded from appsettings.json.
     /// </summary>
     public class LotteryConfig
     {

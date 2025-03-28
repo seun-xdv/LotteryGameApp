@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace LotteryGame.Services
 {
+    /// <summary>
+    /// Implements IResultPresenter to display results via console output.
+    /// </summary>
     public class ConsoleResultPresenter : IResultPresenter
     {
         public void PresentResults(List<Player> players, PrizeDistributionResult prizeResult, PresentationSummary summary, IConsoleService console)

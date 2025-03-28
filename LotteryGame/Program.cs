@@ -3,6 +3,10 @@ using LotteryGame.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
+
+/// <summary>
+/// Entry point for LotteryGame.
+/// </summary>
 var services = new ServiceCollection();
 
 // Build configuration from appsettings.json.

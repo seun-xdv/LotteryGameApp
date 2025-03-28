@@ -2,6 +2,9 @@ using System;
 
 namespace LotteryGame.Services
 {
+    /// <summary>
+    /// Implements IRandomProvider to generate random numbers.
+    /// </summary>
     public class RandomProvider : IRandomProvider
     {
         private readonly Random _random;

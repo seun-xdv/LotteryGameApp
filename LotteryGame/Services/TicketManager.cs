@@ -2,6 +2,9 @@ using LotteryGame.Models;
 
 namespace LotteryGame.Services
 {
+    /// <summary>
+    /// Generates individual tickets from players' ticket counts.
+    /// </summary>
     public class TicketManager : ITicketManager
     {
         public List<Ticket> GenerateTickets(List<Player> players)
