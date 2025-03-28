@@ -20,6 +20,9 @@ services.AddSingleton<ILotteryService, LotteryService>();
 services.AddSingleton<IPlayerManager, PlayerManager>();
 services.AddSingleton<ITicketManager, TicketManager>();
 services.AddSingleton<IPrizeDistributor, PrizeDistributor>();
+services.AddSingleton<IResultPresenter, ConsoleResultPresenter>();
+services.AddSingleton<IRandomProvider, RandomProvider>();
+services.AddSingleton<ISummaryCalculator, SummaryCalculator>();
 
 // Build service provider.
 var serviceProvider = services.BuildServiceProvider();

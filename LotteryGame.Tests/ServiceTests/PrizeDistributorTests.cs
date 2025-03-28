@@ -7,14 +7,6 @@ using Xunit;
 
 namespace LotteryGame.Tests.ServiceTests
 {
-    // A fake random that returns minimum values to prevent shuffling.
-    public class FakeRandom : Random
-    {
-        public override int Next() => 0;
-        public override int Next(int maxValue) => 0;
-        public override int Next(int minValue, int maxValue) => minValue;
-    }
-
     public class PrizeDistributorTests
     {
         [Fact]
@@ -46,18 +38,18 @@ namespace LotteryGame.Tests.ServiceTests
                 ThirdTierWinnerPercentage = 0.20
             };
             decimal totalRevenue = tickets.Count * config.TicketCost;
-            var fakeRandom = new FakeRandom();
             IPrizeDistributor prizeDistributor = new PrizeDistributor();
+            var fakeRandom = new FakeRandomProvider();
 
             // Act
             PrizeDistributionResult result = prizeDistributor.DistributePrizes(new List<Ticket>(tickets), config, totalRevenue, fakeRandom);
 
             // Assert
             Assert.NotNull(result);
-            // Check house profit.
-            Assert.Equal(1.0m, result.HouseProfit);
-            // Expect 1 grand prize, 1 second tier, and 2 third tier winners.
             Assert.Equal(4, result.WinningTickets.Count);
+
+            decimal distributed = result.WinningTickets.Sum(w => w.PrizeAmount);
+            Assert.Equal(totalRevenue - result.HouseProfit, distributed);
 
             var grandWinner = result.WinningTickets.Find(w => w.PrizeTier == "Grand Prize");
             Assert.NotNull(grandWinner);

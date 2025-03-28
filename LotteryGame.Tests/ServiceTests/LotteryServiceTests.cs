@@ -1,5 +1,6 @@
 using LotteryGame.Configuration;
 using LotteryGame.Services;
+using LotteryGame.Models;
 using Microsoft.Extensions.Options;
 
 namespace LotteryGame.Tests.ServiceTests
@@ -10,12 +11,13 @@ namespace LotteryGame.Tests.ServiceTests
         private ILotteryService CreateLotteryService(LotteryConfig config, IConsoleService console)
         {
             var options = Options.Create(config);
-            // For simplicity, instantiate the helper services directly.
             IPlayerManager playerManager = new PlayerManager();
             ITicketManager ticketManager = new TicketManager();
             IPrizeDistributor prizeDistributor = new PrizeDistributor();
-
-            return new LotteryService(options, console, playerManager, ticketManager, prizeDistributor);
+            IResultPresenter resultPresenter = new ConsoleResultPresenter();
+            IRandomProvider randomProvider = new FakeRandomProvider();
+            ISummaryCalculator summaryCalculator = new SummaryCalculator();
+            return new LotteryService(options, console, playerManager, ticketManager, prizeDistributor, resultPresenter, summaryCalculator, randomProvider);
         }
         
         [Fact]

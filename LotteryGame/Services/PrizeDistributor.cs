@@ -8,8 +8,7 @@ namespace LotteryGame.Services
     /// </summary>
     public class PrizeDistributor : IPrizeDistributor
     {
-        // refactored section
-        public PrizeDistributionResult DistributePrizes(List<Ticket> tickets, LotteryConfig config, decimal totalRevenue, Random random)
+        public PrizeDistributionResult DistributePrizes(List<Ticket> tickets, LotteryConfig config, decimal totalRevenue, IRandomProvider randomProvider)
         {
             var result = new PrizeDistributionResult();
 
@@ -17,7 +16,7 @@ namespace LotteryGame.Services
             var pools = CalculatePrizePools(totalRevenue, config);
 
             // 2. Shuffle tickets.
-            tickets = tickets.OrderBy(x => random.Next()).ToList();
+            tickets = tickets.OrderBy(x => randomProvider.Next()).ToList();
             var winningTickets = new List<WinningTicket>();
 
             // 3. Grand Prize.

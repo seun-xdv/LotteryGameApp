@@ -13,6 +13,6 @@ namespace LotteryGame.Services
     }
     public interface IPrizeDistributor
     {
-        PrizeDistributionResult DistributePrizes(List<Ticket> tickets, LotteryConfig config, decimal totalRevenue, Random random);
+        PrizeDistributionResult DistributePrizes(List<Ticket> tickets, LotteryConfig config, decimal totalRevenue, IRandomProvider randomProvider);
     }
 }

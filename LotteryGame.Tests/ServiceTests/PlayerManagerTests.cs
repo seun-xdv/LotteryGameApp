@@ -25,11 +25,11 @@ namespace LotteryGame.Tests.ServiceTests
 
             // Fake console input: valid input "3" for the human player.
             var fakeConsole = new FakeConsoleService(new[] { "3" });
-            var random = new Random(42);
             IPlayerManager playerManager = new PlayerManager();
+            var fakeRandom = new FakeRandomProvider();
 
             // Act
-            List<Player> players = playerManager.CreatePlayers(config, fakeConsole, random);
+            List<Player> players = playerManager.CreatePlayers(config, fakeConsole, fakeRandom);
 
             // Assert
             Assert.NotEmpty(players);
@@ -55,11 +55,11 @@ namespace LotteryGame.Tests.ServiceTests
 
             // Simulate invalid input ("abc") then valid input ("4").
             var fakeConsole = new FakeConsoleService(new[] { "abc", "4" });
-            var random = new Random(42);
             IPlayerManager playerManager = new PlayerManager();
+            var fakeRandom = new FakeRandomProvider();
 
             // Act
-            List<Player> players = playerManager.CreatePlayers(config, fakeConsole, random);
+            List<Player> players = playerManager.CreatePlayers(config, fakeConsole, fakeRandom);
 
             // Assert
             var humanPlayer = players[0];
