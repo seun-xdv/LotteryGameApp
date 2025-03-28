@@ -1,6 +1,6 @@
 # Lottery Game Application
 
-A lottery game written in C# (.NET 8). This project demonstrates best practices such as separation of concerns, dependency injection, unit testing, and clear modular structure.
+A lottery game written in C# (.NET 8). This project demonstrates best practices such as separation of concerns, dependency injection, unit testing and clear modular structure.
 
 ## Project Overview
 
@@ -104,7 +104,7 @@ dotnet test
 
 ## Configuration
 
-Game settings can be customized in `LotteryGame/appsettings.json`:
+Game settings can be customised in `LotteryGame/appsettings.json`:
 
 ```json
 {
